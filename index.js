@@ -23,7 +23,7 @@ express.urlencoded({ extended: true });
 
 
 
-app.get('/rtc/:channelName/:role/:uid', async (req, res) => {
+app.get('/rtc/:channelName/:role/uid/:uid', async (req, res) => {
   const { channelName, role, uid } = req.params || req.body;
   const expirationTimeInSeconds = 3600;
   const currentTimestamp = Math.floor(Date.now() / 1000);
