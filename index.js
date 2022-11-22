@@ -19,16 +19,23 @@ const appCertificate = process.env.APP_CERTIFICATE;
 // const channelName = 'abc';
 // const uid = 1;
 // const role = RtcRole.PUBLISHER;
-const expirationTimeInSeconds = 3600;
-const currentTimestamp = Math.floor(Date.now() / 1000);
-const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+// const expirationTimeInSeconds = 3600;
+// const currentTimestamp = Math.floor(Date.now() / 1000);
+// const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
 // Build token with uid
 
 express.json();
 express.urlencoded({ extended: true });
 
-app.get('/rtc/:channelName/:role/:uid/?expiry=expireTime', async (req, res) => {
+const expirationTimeInSeconds = 3600;
+const currentTimestamp = Math.floor(Date.now() / 1000);
+const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+
+app.get('/rtc/:channelName/:role/:uid', async (req, res) => {
   const { channelName, role, uid } = req.params || req.body;
+
+  // console.log(privilegeExpiredTs);
+
   const tokenA = await RtcTokenBuilder.buildTokenWithUid(
     appId,
     appCertificate,
@@ -37,10 +44,10 @@ app.get('/rtc/:channelName/:role/:uid/?expiry=expireTime', async (req, res) => {
     role,
     privilegeExpiredTs
   );
-  console.log(tokenA);
+  // console.log(tokenA);
   return res.status(200).json({ rtcToken: tokenA });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server token listening on port ${port}`);
 });
