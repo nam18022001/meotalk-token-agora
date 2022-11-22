@@ -10,7 +10,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 8080;
+const port = 3001;
 
 app.use(cors());
 
@@ -22,9 +22,12 @@ express.json();
 express.urlencoded({ extended: true });
 
 
-app.get('/rtc/:channelName/:role/:uid/?expiry=expireTime', async (req, res) => {
-  const { channelName, role, uid, expireTime } = req.params || req.body;
 
+app.get('/rtc/:channelName/:role/:uid', async (req, res) => {
+  const { channelName, role, uid } = req.params || req.body;
+  const expirationTimeInSeconds = 3600;
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
   // console.log(privilegeExpiredTs);
 
   const tokenA = await RtcTokenBuilder.buildTokenWithUid(
@@ -33,7 +36,7 @@ app.get('/rtc/:channelName/:role/:uid/?expiry=expireTime', async (req, res) => {
     channelName,
     uid,
     role,
-    expireTime
+    privilegeExpiredTs
   );
   // console.log(tokenA);
   return res.status(200).json({ rtcToken: tokenA });
