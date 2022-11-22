@@ -32,7 +32,7 @@ const currentTimestamp = Math.floor(Date.now() / 1000);
 const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
 
 app.get('/rtc/:channelName/:role/:uid/?expiry=expireTime', async (req, res) => {
-  const { channelName, role, uid } = req.params || req.body;
+  const { channelName, role, uid, expireTime } = req.params || req.body;
 
   // console.log(privilegeExpiredTs);
 
