@@ -1,5 +1,4 @@
 require("dotenv").config();
-const md5 = require("md5");
 const {
   RtcTokenBuilder,
   RtmTokenBuilder,
@@ -26,18 +25,17 @@ app.get("/rtc/:channelName/:role/uid/:uid", async (req, res) => {
   const expirationTimeInSeconds = 3600;
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
-  const channel = md5(channelName);
 
   const tokenA = await RtcTokenBuilder.buildTokenWithUid(
     appId,
     appCertificate,
-    channel,
+    channelName,
     uid,
     role,
     privilegeExpiredTs
   );
   // console.log(tokenA);
-  return res.status(200).json({ rtcToken: tokenA, channelCall: channel });
+  return res.status(200).json({ rtcToken: tokenA });
 });
 
 app.listen(port, () => {
